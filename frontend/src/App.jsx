@@ -7,7 +7,9 @@ import Navigation from "./Navigation/Navigation";
 import ResumeAnalysis from "./ResumeAnalysis/ResumeAnalysis";
 import InterviewQuestions from "./InterviewQuestions/InterviewQuestions";
 import Selection from "./Selection/Selection";
-
+import OtpVerify from "./Register/OtpVerify";
+import ResumeAnalysisResult from "./ResumeAnalysis/ResAnalDisplay";
+import DisplayQuestions from "./InterviewQuestions/DisplayQuestions";
 function App() {
     return (
         <Router>
@@ -20,6 +22,9 @@ function App() {
                     <Route path="/selection" element={<Selection />} />
                     <Route path="/resume-analysis" element={<ResumeAnalysis />} />
                     <Route path="/interview-questions" element={<InterviewQuestions />} />
+                    <Route path="/verify-otp" element={<OtpVerify />} />
+                    <Route path="/resume-analysis-results" element={<ResumeAnalysisResult />} />
+                    <Route path="/display-questions" element={<ResumeAnalysisResult />} />
                 </Routes>
             </AuthProvider>
         </Router>

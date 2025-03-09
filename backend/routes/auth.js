@@ -1,9 +1,86 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/User"); // ✅ Import the User model
+const User = require("../models/User"); 
 const bcrypt = require("bcryptjs");
 const { generateToken } = require("../config/jwt.js")
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
+const { EventEmitterAsyncResource } = require("nodemailer/lib/xoauth2/index.js");
 
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'nithinkumarkunchala@gmail.com',
+    pass: 'meic klmt qpsu wmwb', // Consider using environment variables for security
+  },
+});
+
+function generateOTP() {
+  const otp = crypto.randomInt(100000, 999999).toString();
+  return otp;
+}
+
+async function sendOTP(email, otp) {
+    const mailOptions = {
+      from: 'scriptedsage00@gmail.com',
+      to: email,
+      subject: 'Your OTP Code',
+      text: `Your OTP code is ${otp}. It is valid for 10 minutes.`,
+    };
+  
+    try {
+      const info = await transporter.sendMail(mailOptions);
+      console.log('OTP email sent:', info.response);
+    } catch (error) {
+      console.error('Error sending OTP email:', error);
+    }
+  }
+  
+const otpStore = new Map();
+
+function storeOTP(email, otp) {
+  const expiresAt = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
+  otpStore.set(email, { otp, expiresAt });
+}
+
+function verifyOTP(email, enteredOtp) {
+    const record = otpStore.get(email);
+    if (!record) {
+      return { success: false, message: 'No OTP found for this email.' };
+    }
+    const { otp, expiresAt } = record;
+    if (Date.now() > expiresAt) {
+      otpStore.delete(email);
+      return { success: false, message: 'OTP has expired.' };
+    }
+    if (otp !== enteredOtp) {
+      return { success: false, message: 'Invalid OTP.' };
+    }
+    otpStore.delete(email);
+    return { success: true, message: 'OTP verified successfully.' };
+  }
+  
+// Endpoint to request OTP
+router.post('/signup/request-otp', async (req, res) => {
+    const { email } = req.body;
+    const otp = generateOTP();
+    await sendOTP(email, otp);
+    storeOTP(email, otp);
+    res.status(200).send('OTP sent to your email.');
+});
+  
+  // Endpoint to verify OTP
+router.post('/signup/verify-otp', (req, res) => {
+    const { email, user_otp } = req.body;
+    const verificationResult = verifyOTP(email, user_otp);
+    if (verificationResult.success) 
+        {
+      res.status(200).send('OTP verified successfully.');
+    } else {
+      res.status(400).send('OTP wrong');
+    }
+  });
+  
 router.post("/signup", async (req, res) => {
     try {
         const { username, password, email, mobile } = req.body;

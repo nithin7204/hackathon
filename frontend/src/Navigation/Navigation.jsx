@@ -1,23 +1,27 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
-import "./Navbar.css";  // Import the CSS file
+import { Link, useNavigate } from 'react-router-dom';
+import "./Navbar.css"; 
 
 export default function Navigation() {
     const { user, logout } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     return (
         <div className="navbar">
-            <Link to="/">
-                <button>Home</button>
-            </Link>
-            {
-                user ? (
-                    <>
-                        <Link onClick={logout}>
-                            <button>Logout</button>
-                        </Link>
-                    </>
+            {/* Left Section */}
+            <div className="nav-left">
+                <button onClick={() => navigate(-1)}>Back</button>
+                <button onClick={() => navigate(1)}>Next</button>
+                <Link to="/">
+                    <button>Home</button>
+                </Link>
+            </div>
+
+            {/* Right Section */}
+            <div className="nav-right">
+                {user ? (
+                    <button onClick={logout}>Logout</button>
                 ) : (
                     <>
                         <Link to="/register">
@@ -27,8 +31,8 @@ export default function Navigation() {
                             <button>Login</button>
                         </Link>
                     </>
-                )
-            }
+                )}
+            </div>
         </div>
     );
 }

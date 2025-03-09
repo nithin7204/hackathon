@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import ResumeAnalysisResult from "./ResAnalDisplay";
-import "./ResumeAnalysis.css";
-import "./ResumeInputForm.css";
+import "./ResumeAnalysis.css"; 
 
-
-export default function ResumeUpload() {
+export default function ResumeAnalysis() {
     const [file, setFile] = useState(null);
     const [jobDescription, setJobDescription] = useState("");
     const [currentRole, setCurrentRole] = useState("");
@@ -20,7 +18,7 @@ export default function ResumeUpload() {
     function handleSubmit(event) {
         event.preventDefault();
         if (!file || !jobDescription || !currentRole) {
-            setError("All fields are required.");
+            setError("⚠️ All fields are required.");
             return;
         }
 
@@ -44,35 +42,52 @@ export default function ResumeUpload() {
         })
         .catch((err) => {
             console.error("Error:", err);
-            setError("Failed to analyze resume. Please try again.");
+            setError("❌ Failed to analyze resume. Please try again.");
             setLoading(false);
         });
     }
 
     return (
-        <div>
-            <h2>Complete Resume Analysis</h2>
-            <form className="input-form" onSubmit={handleSubmit}>
-                <div>
-                    <label>Upload Resume (PDF): </label>
-                    <input type="file" accept=".pdf" onChange={handleFileChange} />
-                </div>
-                <div>
-                    <label>Job Description:</label>
-                    <textarea value={jobDescription} onChange={(e) => setJobDescription(e.target.value)} />
-                </div>
-                <div>
-                    <label>Current Role:</label>
-                    <input type="text" value={currentRole} onChange={(e) => setCurrentRole(e.target.value)} />
-                </div>
-                <button type="submit" disabled={loading}>Analyze Resume</button>
-            </form>
+        <div className={`resume-container ${response ? "results-visible" : ""}`}>
+            {!response ? (
+                <>
+                    <h2 className="resume-title">Complete Resume Analysis</h2>
+                    
+                    <form className="resume-form" onSubmit={handleSubmit}>
+                        <div className="resume-form-group">
+                            <label>Upload Resume (PDF):</label>
+                            <input type="file" accept=".pdf" onChange={handleFileChange} />
+                        </div>
 
-            {loading && <p>Analyzing...</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
+                        <div className="resume-form-group">
+                            <label>Job Description:</label>
+                            <textarea
+                                value={jobDescription}
+                                onChange={(e) => setJobDescription(e.target.value)}
+                                placeholder="Enter the job description..."
+                            />
+                        </div>
 
-            {/* Pass analysis result to ResumeAnalysisResult */}
-            {response && <ResumeAnalysisResult data={response} />}
+                        <div className="resume-form-group">
+                            <label>Current Role:</label>
+                            <input 
+                                type="text" 
+                                value={currentRole} 
+                                onChange={(e) => setCurrentRole(e.target.value)}
+                                placeholder="Your current position..."
+                            />
+                        </div>
+
+                        {error && <p className="resume-error-message">{error}</p>}
+
+                        <button type="submit" className="resume-btn" disabled={loading}>
+                            {loading ? "Analyzing..." : "Analyze Resume"}
+                        </button>
+                    </form>
+                </>
+            ) : (
+                <ResumeAnalysisResult data={response} />
+            )}
         </div>
     );
 }

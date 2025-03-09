@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router()
-
+const authMiddleware = require("../middleware/authMiddleware")
 const multer = require("multer");
 const upload = multer();
 
@@ -26,7 +26,7 @@ async function extractResumeContent(pdfBuffer) {
 
     return extractedText;
 }
-router.post("/", upload.single("file"), async (req, res) => {
+router.post("/",authMiddleware , upload.single("file"), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: "No file uploaded." });
         const resumeText = await extractResumeContent(req.file.buffer);

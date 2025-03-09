@@ -1,58 +1,44 @@
-import React, { useState, useContext } from 'react'
-import { AuthContext } from '../context/AuthContext'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+// Registration.jsx
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import "./Register.css";
 
-
 export default function Register() {
-    const navigate = useNavigate()
-
-    const [formData, setFormData] = useState(
-        { username: "", email: "", password: "", mobile: "" }
-    )
-    const { setUser } = useContext(AuthContext)
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({ username: "", email: "", password: "", mobile: "" });
+    const {setUser} = useContext(AuthContext);
 
     function handleChange(e) {
-        setFormData({ ...formData, [e.target.name]: e.target.value })
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     }
+
     function handleSubmit(e) {
-        e.preventDefault()
-        console.log(formData)
+        e.preventDefault();
+        console.log(formData);
 
         let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
         if (!emailRegex.test(formData.email)) {
-            return alert("Enter a valid Email")
+            return alert("Enter a valid Email");
         }
-        let mobileRegex = /^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/
 
+        let mobileRegex = /^(?:(?:\+|0{0,2})91(\s*|[-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/;
         if (!mobileRegex.test(formData.mobile)) {
-            return alert("Enter a valid Mobile number")
+            return alert("Enter a valid Mobile number");
         }
-        axios.post("http://localhost:4000/api/auth/signup", formData)
+
+        axios.post("http://localhost:4000/api/auth/signup/request-otp", { email: formData.email })
             .then((res) => {
-                console.log("response from register", res);
-                localStorage.setItem("token", res.data.token);
-                setUser({ token: res.data.token, role: res.data.role });
-                navigate('/selection"')
+                alert("OTP sent to your email.");
+                navigate("/verify-otp", { state: { email: formData.email } });
             })
             .catch((err) => {
                 console.log("Error:", err);
-
-                // Check if response exists before accessing status
-                if (err.response) {
-                    if (err.response.status === 400) {
-                        alert("User already exists. Please login instead.");
-                    } else {
-                        alert(`Error: ${err.response.data.error || "Something went wrong"}`);
-                    }
-                } else {
-                    alert("Network error. Please try again later.");
-                }
+                alert("Error sending OTP. Please try again.");
             });
-
     }
+
     return (
         <div className="register-container">
             <form className="register-form">
@@ -75,6 +61,5 @@ export default function Register() {
                 <button onClick={handleSubmit} className="register-button">Register</button>
             </form>
         </div>
-
-    )
+    );
 }

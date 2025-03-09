@@ -8,6 +8,12 @@
     border-bottom: 2px solid white;
 }
 
+/* Left & Right Sections */
+.nav-left, .nav-right {
+    display: flex;
+    gap: 10px;
+}
+
 /* Navbar Buttons */
 .navbar button {
     background-color: transparent;
@@ -18,7 +24,6 @@
     cursor: pointer;
     transition: 0.3s ease-in-out;
     border-radius: 5px;
-    margin: 0 5px;
 }
 
 /* Hover Effect */
