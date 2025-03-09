@@ -1,0 +1,79 @@
+/* Home Page Container */
+.home-container {
+    background: linear-gradient(to bottom, #121212, #1a1a1a);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Hero Section */
+.hero-section {
+    margin-bottom: 30px;
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffffff;
+    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.2);
+}
+
+.tagline {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #d3d3d3;
+}
+
+/* About & Features Section */
+.about-section, .features-section {
+    max-width: 800px;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+    background: rgba(226, 212, 212, 0.05);
+    backdrop-filter: blur(8px);
+    box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Section Headings */
+.about-section h2, .features-section h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ffffff;
+    display: inline-block;
+    padding-bottom: 5px;
+    color: azure;
+}
+
+/* Features Section */
+.features-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.features-section li {
+    font-size: 1.2rem;
+    margin: 10px 0;
+}
+
+/* Footer */
+.footer {
+    margin-top: 40px;
+    font-size: 1rem;
+    padding: 15px;
+    border-top: 1px solid rgba(227, 208, 208, 0.2);
+    width: 100%;
+    text-align: center;
+    background: #121212;
+    position: fixed;
+    bottom: 0;
+    box-shadow: 0px -2px 10px rgba(255, 255, 255, 0.1);
+}
