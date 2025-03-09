@@ -10,7 +10,7 @@ export default function OtpVerify() {
 
     function handleVerify(e) {
         e.preventDefault();
-        axios.post("http://localhost:4000/api/auth/signup/verify-otp", { email, user_otp: otp })
+        axios.post("https://hackathon-vxdp.onrender.com/api/auth/signup/verify-otp", { email, user_otp: otp })
             .then((res) => {
                 alert("OTP verified successfully!");
                 navigate("/selection");

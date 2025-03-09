@@ -28,7 +28,7 @@ export default function Register() {
             return alert("Enter a valid Mobile number");
         }
 
-        axios.post("http://localhost:4000/api/auth/signup/request-otp", { email: formData.email })
+        axios.post("https://hackathon-vxdp.onrender.com/api/auth/signup/request-otp", { email: formData.email })
             .then((res) => {
                 alert("OTP sent to your email.");
                 navigate("/verify-otp", { state: { email: formData.email } });

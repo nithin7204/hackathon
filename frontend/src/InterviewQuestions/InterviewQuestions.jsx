@@ -29,7 +29,7 @@ export default function InterviewQuestions() {
         formData.append("jobDescription", jobDescription);
         formData.append("currentRole", currentRole);
 
-        axios.post("http://localhost:4000/api/questions", formData, {
+        axios.post("https://hackathon-vxdp.onrender.com/api/questions", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
                 "Authorization": `Bearer ${localStorage.getItem("token")}`
