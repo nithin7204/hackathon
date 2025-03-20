@@ -1,14 +1,12 @@
 // Registration.jsx
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import "./Register.css";
 
 export default function Register() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({ username: "", email: "", password: "", mobile: "" });
-    const {setUser} = useContext(AuthContext);
 
     function handleChange(e) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,7 +14,7 @@ export default function Register() {
 
     function handleSubmit(e) {
         e.preventDefault();
-        console.log(formData);
+        console.log("User Data:", formData);
 
         let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!emailRegex.test(formData.email)) {
@@ -31,10 +29,10 @@ export default function Register() {
         axios.post("https://hackathon-vxdp.onrender.com/api/auth/signup/request-otp", { email: formData.email })
             .then((res) => {
                 alert("OTP sent to your email.");
-                navigate("/verify-otp", { state: { email: formData.email } });
+                navigate("/verify-otp", { state: { ...formData } });  // 🔥 Send full user data
             })
             .catch((err) => {
-                console.log("Error:", err);
+                console.error("Error:", err);
                 alert("Error sending OTP. Please try again.");
             });
     }
